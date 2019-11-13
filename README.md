@@ -2,11 +2,6 @@ Initialize Terraform:
 $ cd terraform/
 $ terraform init
 
-Create S3 Bucket
+Initizalize Lambda Function:
+#This will build an S3 bucket, zip and store the python function, and create the Lambda in AWS.
 $ terraform apply
-
-Follow instructions here to install SAM CLI: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html
-
-
-sam package --output-template-file packaged.yaml --s3-bucket slalom-devops-demo --profile slalom
-
