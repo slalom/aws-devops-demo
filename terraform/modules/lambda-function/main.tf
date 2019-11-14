@@ -5,7 +5,13 @@ provider "aws" {
 
 #Ensure S3 Bucket Exists
 module "s3-bucket" {
-  source = "./modules/s3-bucket/"
+  source = "../s3-bucket/"
+  bucket_name = "${var.stack_name}-s3"
+
+  tag_email = "${var.tag_email}"
+  tag_manager = "${var.tag_manager}"
+  tag_market = "${var.tag_market}"
+  tag_office = "${var.tag_office}"
 }
 
 #Create an IAM Role for the Lambda  
@@ -51,4 +57,12 @@ resource "aws_lambda_function" "demo_lambda" {
   s3_key           = "compiled_functions/demo_lambda.zip"
   role             = "${aws_iam_role.lambda_exec_role.arn}"
   source_code_hash = "${filebase64sha256("../../hello-world/hello_world/demo_lambda.zip")}"
+
+  tags = {
+    Name = "${var.stack_name}-lambda"
+    Manager = "${var.tag_manager}"
+    Market = "${var.tag_market}"
+    "Engagement Office" = "${var.tag_office}"
+    Email = "${var.tag_email}"
+  }
 }
