@@ -5,7 +5,13 @@ provider "aws" {
 
 #Ensure S3 Bucket Exists
 module "s3-bucket" {
-  source = "./modules/s3-bucket/"
+  source = "../s3-bucket/"
+  bucket_name = "${var.stack_name}-s3"
+
+  tag_email = "${var.tag_email}"
+  tag_manager = "${var.tag_manager}"
+  tag_market = "${var.tag_market}"
+  tag_office = "${var.tag_office}"
 }
 
 #Create an IAM Role for the Lambda  
