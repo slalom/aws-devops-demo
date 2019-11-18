@@ -7,6 +7,8 @@ tag_email   = "gus.price@slalom.com"
 # Infra Vars
 stack_name = "slalom-devops-demo"
 region = "us-west-1"
+environment = "poc"
+profile = "slalom"
 
 #TODO: Add VPC Params
 //vpc_cidr = "172.16.0.0/24"
