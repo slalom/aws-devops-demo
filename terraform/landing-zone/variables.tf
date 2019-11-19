@@ -1,32 +1,48 @@
 #Define Variables
-variable "stack_name" {}
-variable "region" {}
+variable "stack_name" {
+}
 
-variable "vpc_cidr" {}
+variable "region" {
+}
+
+variable "profile" {
+}
+
+variable "vpc_cidr" {
+}
 
 variable "subnet_public_cidrs" {
-  type = "list"
+  type = list(string)
 }
 
 variable "subnet_private_cidrs" {
-  type = "list"
+  type = list(string)
 }
 
 variable "availability_zones" {
-  type = "list"
+  type = list(string)
 }
 
 #Tags
-variable "tag_manager" {}
-variable "tag_market" {}
-variable "tag_office" {}
-variable "tag_email" {}
+variable "tag_manager" {
+}
+
+variable "tag_market" {
+}
+
+variable "tag_office" {
+}
+
+variable "tag_email" {
+}
 
 #Bastion Variables
-variable "bastion_key_name" {}
+variable "bastion_public_key" {
+}
+
 variable "bastion_instance_type" {
-  default = "c5.large"
 }
+
 variable "bastion_ami_id" {
-  default = "ami-07a0c6e669965bb7c"
 }
+

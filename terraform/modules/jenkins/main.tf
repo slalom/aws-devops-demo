@@ -43,7 +43,7 @@ module "eks" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -56,7 +56,7 @@ resource "aws_iam_role_policy_attachment" "workers_AmazonEC2ContainerRegistryPow
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -73,7 +73,7 @@ resource "aws_s3_bucket" "vault-unseal" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -85,7 +85,7 @@ resource "aws_kms_key" "bank_vault" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -110,7 +110,7 @@ resource "aws_dynamodb_table" "vault-data" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -122,7 +122,7 @@ resource "aws_iam_user" "vault" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -183,7 +183,7 @@ data "aws_iam_policy_document" "vault" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -197,7 +197,7 @@ resource "aws_iam_user_policy" "vault" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -208,7 +208,7 @@ resource "aws_iam_access_key" "vault" {
     Name                = "${var.bucket_name}"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }

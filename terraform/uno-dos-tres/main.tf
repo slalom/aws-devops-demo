@@ -1,12 +1,12 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "us-west-1"
 }
 
 terraform {
   backend "s3" {
     bucket = "marcelo-terraform"
     key    = "serverless-tf/terraform.tfstate"
-    region = "us-west-2"
+    region = "us-west-1"
   }
 }
 

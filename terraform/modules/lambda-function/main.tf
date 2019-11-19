@@ -20,7 +20,7 @@ EOF
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -35,7 +35,7 @@ resource "aws_iam_policy" "lambda_iam_policy" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -48,7 +48,7 @@ resource "aws_iam_role_policy_attachment" "lambda-policy" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -70,7 +70,7 @@ resource "aws_s3_bucket_object" "file_upload" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -88,7 +88,7 @@ resource "aws_lambda_function" "demo_lambda" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -101,7 +101,7 @@ resource "aws_sqs_queue" "function_updates_queue" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -113,7 +113,7 @@ resource "aws_sqs_queue_policy" "sqs_policy" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -127,7 +127,7 @@ resource "aws_sns_topic_subscription" "function_updates_sqs_target" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
@@ -141,7 +141,7 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
     Name                = "${var.stack_name}-lambda"
     Manager             = "${var.tag_manager}"
     Market              = "${var.tag_market}"
-    "Engagement Office" = "${var.tag_office}"
+    Engagement Office = "${var.tag_office}"
     Email               = "${var.tag_email}"
   }
 }
