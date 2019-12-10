@@ -1,0 +1,76 @@
+---
+# included file
+- name: Add unlock script directory
+  file:
+    path: '{{ jenkins2_home_directory }}/init.groovy.d'
+    owner: '{{ jenkins2_user }}'
+    group: '{{ jenkins2_user }}'
+    state: directory
+  become: true
+
+- name: Add script for unlock disabling
+  template:
+    src: 'disable_unlock.groovy.j2'
+    dest: '{{ jenkins2_home_directory }}/init.groovy.d/basic-security.groovy'
+    owner: '{{ jenkins2_user }}'
+    group: '{{ jenkins2_user }}'
+    mode: 0744
+  become: true
+
+- name: Create directory for user
+  file:
+    path: '{{ jenkins2_home_directory }}/users/{{ jenkins2_cli_username }}'
+    state: directory
+    owner: '{{ jenkins2_user }}'
+    group: '{{ jenkins2_user }}'
+    mode: 0755
+  become: true
+
+- name: Delete user directory
+  file:
+    path: '{{ jenkins2_home_directory }}/users/{{ jenkins2_cli_username }}'
+    state: absent
+  become: true
+
+- name: Force all notified handlers to run
+  meta: flush_handlers
+
+- name: Wait for Jenkins starts
+  wait_for:
+    path: '{{ jenkins2_home_directory }}/config.xml'
+
+- name: Force all notified handlers to run
+  meta: flush_handlers
+
+- name: Remove unlock script
+  file:
+    path: '{{ jenkins2_home_directory }}/init.groovy.d/basic-security.groovy'
+    state: absent
+  become: true
+  notify:
+    - Restart Jenkins
+
+- name: Add script for password set
+  template:
+    src: 'reset_user_password.groovy.j2'
+    dest: '{{ jenkins2_home_directory }}/init.groovy.d/basic-security.groovy'
+    owner: '{{ jenkins2_user }}'
+    group: '{{ jenkins2_user }}'
+    mode: 0744
+  become: true
+  notify:
+    - Restart Jenkins
+
+- name: Force all notified handlers to run
+  meta: flush_handlers
+
+- name: Remove unlock script2
+  file:
+    path: '{{ jenkins2_home_directory }}/init.groovy.d/basic-security.groovy'
+    state: absent
+  become: true
+  notify:
+    - Restart Jenkins
+
+- name: Force all notified handlers to run
+  meta: flush_handlers

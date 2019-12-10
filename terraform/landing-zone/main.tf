@@ -13,12 +13,17 @@ module "vpc" {
   stack_name            = var.stack_name
   region                = var.region
   vpc_cidr              = var.vpc_cidr
-  subnet_private_cidrs  = var.subnet_private_cidrs
-  subnet_public_cidrs   = var.subnet_public_cidrs
-  availability_zones    = var.availability_zones
-  bastion_public_key    = var.bastion_public_key
+  subnet_private_cidr_1 = var.subnet_private_cidr_1
+  subnet_private_cidr_2 = var.subnet_private_cidr_2
+  subnet_public_cidr_1  = var.subnet_public_cidr_1
+  subnet_public_cidr_2  = var.subnet_public_cidr_2
+  availability_zone_1   = var.availability_zone_1
+  availability_zone_2   = var.availability_zone_2
+  bastion_public_key    = var.ssh_public_key
   bastion_instance_type = var.bastion_instance_type
   bastion_ami_id        = var.bastion_ami_id
+
+  build_nat_gateway = var.build_nat_gateway
 
   tag_email   = var.tag_email
   tag_manager = var.tag_manager
@@ -29,24 +34,11 @@ module "vpc" {
 # Build S3-bucket
 module "s3-bucket" {
   source      = "../modules/s3-bucket/"
-  bucket_name = "${var.stack_name}-s3"
-  tag_email   = "${var.tag_email}"
-  tag_manager = "${var.tag_manager}"
-  tag_market  = "${var.tag_market}"
-  tag_office  = "${var.tag_office}"
+  bucket_name = "${var.stack_name}-lambda-s3"
+  tag_email   = var.tag_email
+  tag_manager = var.tag_manager
+  tag_market  = var.tag_market
+  tag_office  = var.tag_office
 }
 
-# # Generate Jenkins Parameters
-# module "jenkins" {
-#   source  = "../modules/jenkins/"
-#   subnets = "${module.vpc.subnets}"
-#   tag_email   = "${var.tag_email}"
-#   tag_manager = "${var.tag_manager}"
-#   tag_market  = "${var.tag_market}"
-#   tag_office  = "${var.tag_office}"
-# }
-# resource "null_resource" "jenkins-deploy" {
-#   provisioner "local-exec" {
-#     command = "jx install ${module.jenkins.jx_params}"
-#   }
-# }
+

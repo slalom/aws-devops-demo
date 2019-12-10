@@ -1,0 +1,44 @@
+import hudson.model.*;
+import jenkins.model.*;
+import hudson.tools.*;
+import hudson.util.Secret;
+
+// Variables
+def SystemAdminMailAddress = '{{ jenkins2_smtp_sysad_email }}'
+def SMTPUser = '{{ jenkins2_smtp_user }}'
+def SMTPPassword = '{{ jenkins2_smtp_password }}'
+def SMTPPort = '{{ jenkins2_smtp_port }}'
+def SMTPHost = '{{ jenkins2_smtp_host }}'
+
+// Constants
+def instance = Jenkins.getInstance()
+def mailServer = instance.getDescriptor("hudson.tasks.Mailer")
+def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
+def extmailServer = instance.getDescriptor("hudson.plugins.emailext.ExtendedEmailPublisher")
+
+Thread.start {
+        //Jenkins Location
+        jenkinsLocationConfiguration.setAdminAddress(SystemAdminMailAddress)
+        jenkinsLocationConfiguration.save()
+
+        //E-mail Server
+        mailServer.setSmtpAuth(SMTPUser, SMTPPassword)
+        mailServer.setSmtpHost(SMTPHost)
+        mailServer.setSmtpPort(SMTPPort)
+        mailServer.setCharset("UTF-8")
+
+        // Save the state
+        instance.save()
+}
+sleep 10000
+        //Extended-Email
+        extmailServer.smtpAuthUsername=SMTPUser
+        extmailServer.smtpAuthPassword=Secret.fromString(SMTPPassword)
+        extmailServer.smtpHost=SMTPHost
+        extmailServer.smtpPort=SMTPPort
+        extmailServer.charset="UTF-8"
+        extmailServer.defaultSubject="\$PROJECT_NAME - Build # \$BUILD_NUMBER - \$BUILD_STATUS!"
+        extmailServer.defaultBody="\$PROJECT_NAME - Build # \$BUILD_NUMBER - \$BUILD_STATUS:\n\nCheck console output at \$BUILD_URL to view the results."
+        extmailServer.upgradeFromMailer()
+    // Save the state
+    instance.save()
