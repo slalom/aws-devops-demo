@@ -1,0 +1,111 @@
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+before_script:
+  - rm -rf .terraform
+  - terraform --version
+  - TF_LOG=TRACE
+  - export AWS_ACCESS_KEY_ID=${aws_access_key_id}
+  - export AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
+  # - mkdir -p ./creds
+  # - echo $SERVICEACCOUNT | base64 -d > ./creds/serviceaccount.json
+  # - cd terraform/modules/lambda-function
+  # - terraform init
+  - cd ${CI_PROJECT_DIR}/terraform/modules/s3-bucket
+  - terraform init
+  - cd ../vpc
+  - terraform init
+  # - cd ../../remote-state
+  # - terraform init
+
+  - cd ${CI_PROJECT_DIR}/terraform/landing-zone
+  - terraform init
+
+  # - cd ../hello-world
+  # - terraform init
+
+stages:
+  - validate
+  - plan
+  - apply-lz
+  - apply-lambda
+  - destroy-lambda
+  - destroy-lz
+
+validate:
+  stage: validate
+  script:
+    #define these in settings > CI / CD > Variables
+    #This is NOT best practice, make an IAM Role and define that as detailed here (assume role): https://www.terraform.io/docs/providers/aws/index.html
+    - terraform validate
+
+plan-landingzone:
+  stage: plan
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/landing-zone
+    - terraform init
+    - terraform plan -var-file=../vars/poc.tfvars -out "landingzone-planfile"
+  dependencies:
+    - validate
+  artifacts:
+    paths:
+      - terraform/landing-zone/landingzone-planfile
+    expire_in: 1 week
+
+plan-lambdafunctions:
+  stage: plan
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/uno-dos-tres
+    - terraform init
+    - terraform plan -var-file=../vars/poc.tfvars -out "lambdafunctions-planfile"
+  dependencies:
+    - validate
+  artifacts:
+    paths:
+      - terraform/uno-dos-tres/lambdafunctions-planfile
+    expire_in: 1 week
+
+apply-landingzone:
+  stage: apply-lz
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/landing-zone
+    - terraform init
+    - terraform apply -input=false "landingzone-planfile"
+  dependencies:
+    - plan-landingzone
+  when: manual
+
+apply-lambdafunctions:
+  stage: apply-lambda
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/uno-dos-tres
+    - terraform init
+    - terraform apply -input=false "lambdafunctions-planfile"
+  dependencies:
+    - plan-lambdafunctions
+  when: manual
+
+destroy-lambdafunctions:
+  stage: destroy-lambda
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/uno-dos-tres
+    - terraform init
+    - terraform destroy -var-file=../vars/poc.tfvars -auto-approve
+  dependencies:
+    - plan-lambdafunctions
+    - apply-lambdafunctions
+  when: manual
+
+destroy-landingzone:
+  stage: destroy-lz
+  script:
+    - cd ${CI_PROJECT_DIR}/terraform/landing-zone
+    - terraform init
+    - terraform destroy -var-file=../vars/poc.tfvars -auto-approve
+  dependencies:
+    - plan-landingzone
+    - apply-landingzone
+  when: manual
